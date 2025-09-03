@@ -1,83 +1,58 @@
-const canvas = document.getElementById('network');
-const ctx = canvas.getContext('2d');
-
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
-
-class Node {
-  constructor() {
-    this.x = Math.random() * width;
-    this.y = Math.random() * height;
-    this.vx = (Math.random() - 0.5) * 0.5;
-    this.vy = (Math.random() - 0.5) * 0.5;
-    this.radius = 3;
-  }
-  move() {
-    this.x += this.vx;
-    this.y += this.vy;
-    if(this.x < 0 || this.x > width) this.vx *= -1;
-    if(this.y < 0 || this.y > height) this.vy *= -1;
-  }
-  draw() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
-    ctx.fillStyle = "#00f5ff";
-    ctx.shadowColor = "#00f5ff";
-    ctx.shadowBlur = 15;
-    ctx.fill();
-    ctx.shadowBlur = 0;
-  }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: radial-gradient(circle at top, #0a0f1f, #000814);
+  font-family: Arial, sans-serif;
 }
 
-const nodes = Array.from({length:40}, () => new Node());
-let pulse = 0;
-
-function drawLines() {
-  nodes.forEach((a,i) => {
-    nodes.forEach((b,j) => {
-      if(i < j){
-        const dx = a.x - b.x;
-        const dy = a.y - b.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if(dist < 180){
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = `rgba(0,245,255,${0.15*(180-dist)/180})`;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-
-          if(Math.random() < 0.005){
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = "rgba(0,255,180,0.8)";
-            ctx.lineWidth = 2 + Math.sin(pulse)*1.5;
-            ctx.shadowColor = "#00ffcc";
-            ctx.shadowBlur = 20;
-            ctx.stroke();
-            ctx.shadowBlur = 0;
-          }
-        }
-      }
-    });
-  });
+canvas {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-function animate() {
-  ctx.clearRect(0,0,width,height);
-  drawLines();
-  nodes.forEach(node => {
-    node.move();
-    node.draw();
-  });
-  pulse += 0.05;
-  requestAnimationFrame(animate);
+/* Conteúdo central */
+.content {
+  position: relative;
+  z-index: 2;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
 }
 
-animate();
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  text-shadow: 0 0 20px rgba(0,255,255,0.7);
+}
 
-window.addEventListener('resize', () => {
-  width = canvas.width = window.innerWidth;
-  height = canvas.height = window.innerHeight;
-});
+p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  max-width: 600px;
+}
+
+/* Botão WhatsApp */
+.btn-whatsapp {
+  background: #25D366;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  box-shadow: 0 0 20px rgba(37, 211, 102, 0.6);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-whatsapp:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(37, 211, 102, 1);
+}
